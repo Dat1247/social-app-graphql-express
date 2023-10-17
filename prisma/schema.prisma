@@ -1,0 +1,124 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model comments {
+  id        Int      @id @default(autoincrement())
+  postID    Int?
+  userID    Int?
+  content   String   @db.VarChar(255)
+  createdAt DateTime @db.DateTime(0)
+  updatedAt DateTime @db.DateTime(0)
+  posts     posts?   @relation(fields: [postID], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "comments_ibfk_1")
+  users     users?   @relation(fields: [userID], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "comments_ibfk_2")
+
+  @@index([postID], map: "postID")
+  @@index([userID], map: "userID")
+}
+
+model friends {
+  id                            Int      @id @default(autoincrement())
+  userID                        Int?
+  friendID                      Int?
+  isFriend                      Boolean?
+  createdAt                     DateTime @db.DateTime(0)
+  updatedAt                     DateTime @db.DateTime(0)
+  users_friends_userIDTousers   users?   @relation("friends_userIDTousers", fields: [userID], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "friends_ibfk_1")
+  users_friends_friendIDTousers users?   @relation("friends_friendIDTousers", fields: [friendID], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "friends_ibfk_2")
+
+  @@index([friendID], map: "friendID")
+  @@index([userID], map: "userID")
+}
+
+model likes {
+  id        Int      @id @default(autoincrement())
+  postID    Int?
+  userID    Int?
+  createdAt DateTime @db.DateTime(0)
+  updatedAt DateTime @db.DateTime(0)
+  posts     posts?   @relation(fields: [postID], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "likes_ibfk_1")
+  users     users?   @relation(fields: [userID], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "likes_ibfk_2")
+
+  @@index([postID], map: "postID")
+  @@index([userID], map: "userID")
+}
+
+model posts {
+  id         Int        @id @default(autoincrement())
+  userID     Int?
+  content    String?    @db.VarChar(255)
+  fileUpload Json?
+  viewMode   String?    @default("Everyone") @db.VarChar(255)
+  createdAt  DateTime   @db.DateTime(0)
+  updatedAt  DateTime   @db.DateTime(0)
+  comments   comments[]
+  likes      likes[]
+  users      users?     @relation(fields: [userID], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "posts_ibfk_1")
+  tagposts   tagposts[]
+
+  @@index([userID], map: "userID")
+}
+
+model sequelizemeta {
+  name String @id @unique(map: "name") @db.VarChar(255)
+}
+
+model tagposts {
+  id        Int      @id @default(autoincrement())
+  postID    Int?
+  tagID     Int?
+  createdAt DateTime @db.DateTime(0)
+  updatedAt DateTime @db.DateTime(0)
+  posts     posts?   @relation(fields: [postID], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "tagposts_ibfk_1")
+  tags      tags?    @relation(fields: [tagID], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "tagposts_ibfk_2")
+
+  @@index([postID], map: "postID")
+  @@index([tagID], map: "tagID")
+}
+
+model tags {
+  id        Int        @id @default(autoincrement())
+  taskName  String     @db.VarChar(255)
+  createdAt DateTime   @db.DateTime(0)
+  updatedAt DateTime   @db.DateTime(0)
+  tagposts  tagposts[]
+}
+
+model users {
+  id                              Int        @id @default(autoincrement())
+  name                            String     @db.VarChar(255)
+  username                        String     @db.VarChar(255)
+  email                           String     @db.VarChar(255)
+  phoneNumber                     String     @db.VarChar(255)
+  password                        String     @db.VarChar(255)
+  avatar                          String?    @db.VarChar(255)
+  userType                        String?    @default("CLIENT") @db.VarChar(255)
+  createdAt                       DateTime   @db.DateTime(0)
+  updatedAt                       DateTime   @db.DateTime(0)
+  comments                        comments[]
+  friends_friends_userIDTousers   friends[]  @relation("friends_userIDTousers")
+  friends_friends_friendIDTousers friends[]  @relation("friends_friendIDTousers")
+  likes                           likes[]
+  posts                           posts[]
+}
+
+model usertypes {
+  id        Int      @id @default(autoincrement())
+  value     String?  @db.VarChar(255)
+  name      String?  @db.VarChar(255)
+  createdAt DateTime @db.DateTime(0)
+  updatedAt DateTime @db.DateTime(0)
+}
+
+model viewmodes {
+  id          Int      @id @default(autoincrement())
+  value       String?  @db.VarChar(255)
+  description String?  @db.VarChar(255)
+  createdAt   DateTime @db.DateTime(0)
+  updatedAt   DateTime @db.DateTime(0)
+}
