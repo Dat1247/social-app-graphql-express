@@ -7,8 +7,8 @@ import cors from 'cors';
 import path from 'path';
 import { fileURLToPath } from "url";
 
-// import { typeDefs } from "./graphql/schema";
-// import { resolvers } from "./graphql/resolvers";
+import {typeDefs} from "./graphql/schema.js";
+import { resolvers } from "./graphql/resolvers.js";
 
 const app = express();
 const httpServer = http.createServer(app);
@@ -21,52 +21,6 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const publicPathDirectory = path.join(__dirname, "./public");
 app.use("/public", express.static(publicPathDirectory));
-
-
-const books = [
-    {
-      title: 'The Awakening',
-      author: 'Kate Chopin',
-    },
-    {
-      title: 'City of Glass',
-      author: 'Paul Auster',
-    },
-  ];
-
-const typeDefs = `#graphql
-  type Book {
-    title: String,
-    author: String
-  }
-
-  type user {
-    id: ID!
-    name: String,
-    username: String,
-    email: String,
-    phoneNumber: String,
-    password: String,
-    avatar: String,
-    userType: String,
-    createdAt: String,
-    updatedAt: String
-  }
-
-  type Query {
-    books: [Book]
-    users: [user]
-  }
-`;
-
-const resolvers = {
-    Query: {
-        books: () => books,
-        users: () => {
-            return prisma.users.findMany()
-        }
-    },
-};
 
 const server = new ApolloServer({
     typeDefs: typeDefs,
