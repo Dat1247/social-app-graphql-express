@@ -13,7 +13,7 @@ import { resolvers } from "./graphql/resolvers.js";
 const app = express();
 const httpServer = http.createServer(app);
 const port = process.env.PORT || 1234;
-const prisma = new PrismaClient();
+
 app.use(cors());
 app.use(express.json());
 

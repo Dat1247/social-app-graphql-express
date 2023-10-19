@@ -1,5 +1,7 @@
 
 export const typeDefs = `#graphql
+  scalar JSON
+  scalar JSONObject
 
   type user {
     id: ID!
@@ -11,7 +13,8 @@ export const typeDefs = `#graphql
     avatar: String,
     userType: String,
     createdAt: String,
-    updatedAt: String
+    updatedAt: String,
+    posts: [post]
   }
 
   type usertype {
@@ -26,9 +29,20 @@ export const typeDefs = `#graphql
     description: String
   }
 
+  type post {
+    id: ID!,
+    userID: String,
+    content: String,
+    viewMode: String,
+    fileUpload: JSON,
+    createdAt: String,
+    updatedAt: String
+  }
+
   type Query {
     usertypes: [usertype],
     viewmodes: [viewmode],
     users: [user],
+    posts: [post]
   }
 `;
