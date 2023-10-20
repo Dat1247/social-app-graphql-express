@@ -3,7 +3,7 @@ export const typeDefs = `#graphql
   scalar JSON
   scalar JSONObject
 
-  type user {
+  type User {
     id: ID!
     name: String,
     username: String,
@@ -14,35 +14,38 @@ export const typeDefs = `#graphql
     userType: String,
     createdAt: String,
     updatedAt: String,
-    posts: [post]
+    Posts: [Post]
   }
 
-  type usertype {
+  type UserType {
     id: ID!,
     value: String,
     name: String
   }
 
-  type viewmode {
+  type ViewMode {
     id: ID!,
     value: String,
     description: String
   }
 
-  type post {
+  type Post {
     id: ID!,
     userID: String,
     content: String,
     viewMode: String,
     fileUpload: JSON,
+    user: User,
     createdAt: String,
     updatedAt: String
   }
 
   type Query {
-    usertypes: [usertype],
-    viewmodes: [viewmode],
-    users: [user],
-    posts: [post]
+    UserTypes: [UserType],
+    ViewModes: [ViewMode],
+    Users: [User],
+    userById(id: ID!): User,
+    Posts: [Post]
+    postById(id: ID!): Post,
   }
 `;

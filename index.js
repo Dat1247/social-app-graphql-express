@@ -27,7 +27,9 @@ const server = new ApolloServer({
     resolvers: resolvers,
 })
 await server.start();
-app.use('/graphql', expressMiddleware(server));
+app.use('/graphql', expressMiddleware(server, {
+    
+}));
 
 // app.listen(port, async() => {
 //     console.log("App listening on port " + port)

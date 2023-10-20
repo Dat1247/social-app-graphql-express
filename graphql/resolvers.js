@@ -3,19 +3,37 @@ const prisma = new PrismaClient();
 
 export const resolvers = {
   Query: {
-    users: async(parent, args) => {
+    Users: async(parent, args) => {
       return await prisma.users.findMany()
     },
-    usertypes: async(parent, args) => {
+    userById: async(parent, args, context) => {
+      let changeTypeId = Number(args.id)
+      return await prisma.users.findUnique({
+        where: {
+          id: changeTypeId
+        }
+      });
+    },
+    UserTypes: async(parent, args) => {
       return await prisma.usertypes.findMany()
     },
-    viewmodes: async(parent, args) => {
+    ViewModes: async(parent, args) => {
       return await prisma.viewmodes.findMany()
     },
+    Posts: async(parent, args) => {
+      return await prisma.posts.findMany()
+    },
+    postById: async(parent, args) => {
+      let changeTypeId = Number(args.id)
+      return await prisma.posts.findUnique({
+        where: {
+          id: changeTypeId
+        }
+      })
+    },
   },
-  user: {
-    posts: async(parent, args) => {
-      console.log({parent: parent, args: args})
+  User: {
+    Posts: async(parent, args) => {
       return await prisma.posts.findMany({
         where: {
           userID: parent.id
@@ -23,7 +41,13 @@ export const resolvers = {
       })
     },
   },
-  // post: {
-
-  // }
+  Post: {
+    user: async(parent, args) => {
+      return await prisma.users.findUnique({
+        where: {
+          id: parent.userID
+        }
+      })
+    }
+  }
 };

@@ -50,6 +50,7 @@ model likes {
 
 model posts {
   id         Int        @id @default(autoincrement())
+  writtenID Int
   userID     Int?
   content    String?    @db.VarChar(255)
   fileUpload Json?
@@ -58,7 +59,7 @@ model posts {
   updatedAt  DateTime   @db.DateTime(0)
   comments   comments[]
   likes      likes[]
-  users      users?     @relation(fields: [userID], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "posts_ibfk_1")
+  user      users?     @relation(fields: [userID], references: [id])
   tagposts   tagposts[]
 
   @@index([userID], map: "userID")
