@@ -50,7 +50,6 @@ model likes {
 
 model posts {
   id         Int        @id @default(autoincrement())
-  writtenID Int
   userID     Int?
   content    String?    @db.VarChar(255)
   fileUpload Json?

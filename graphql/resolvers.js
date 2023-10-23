@@ -7,7 +7,7 @@ export const resolvers = {
       return await prisma.users.findMany()
     },
     userById: async(parent, args, context) => {
-      let changeTypeId = Number(args.id)
+      const changeTypeId = Number(args.id)
       return await prisma.users.findUnique({
         where: {
           id: changeTypeId
@@ -24,7 +24,7 @@ export const resolvers = {
       return await prisma.posts.findMany()
     },
     postById: async(parent, args) => {
-      let changeTypeId = Number(args.id)
+      const changeTypeId = Number(args.id)
       return await prisma.posts.findUnique({
         where: {
           id: changeTypeId
@@ -49,5 +49,6 @@ export const resolvers = {
         }
       })
     }
-  }
+  },
+  
 };

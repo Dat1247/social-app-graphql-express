@@ -47,5 +47,8 @@ export const typeDefs = `#graphql
     userById(id: ID!): User,
     Posts: [Post]
     postById(id: ID!): Post,
+
   }
+
+  
 `;
